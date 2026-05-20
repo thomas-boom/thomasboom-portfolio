@@ -1,35 +1,185 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import PhotoGrid from '../components/PhotoGrid.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import '../styles/photography.css';
-
-const photos = [
-  { src: 'https://images.unsplash.com/photo-1504198458649-3128b932f49b?auto=format&fit=crop&w=1200&q=80', alt: 'Mountain landscape', caption: 'Dawn light on the ridgeline' },
-  { src: 'https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&w=1200&q=80', alt: 'Forest path', caption: 'Quiet forest path' },
-  { src: 'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1200&q=80', alt: 'City skyline', caption: 'City skyline at dusk' },
-  { src: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80', alt: 'Desert', caption: 'Wind-carved dunes' },
-  { src: 'https://images.unsplash.com/photo-1493244040629-496f6d136cc3?auto=format&fit=crop&w=1200&q=80', alt: 'Portrait', caption: 'Candid portrait study' },
-  { src: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80', alt: 'Ocean', caption: 'Waves and horizon' },
-  { src: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80', alt: 'Bridge', caption: 'Bridge in morning fog' },
-  { src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80', alt: 'Architecture', caption: 'Minimal architecture' }
+const posts = [
+  {
+    title: "Untitled",
+    image: "/images/01.jpg",
+    year: "2025",
+  },
+  {
+    title: "Rotterdam",
+    image: "/images/02.jpg",
+    year: "2025",
+  },
+  {
+    title: "Family",
+    image: "/images/03.jpg",
+    year: "2024",
+  },
+  {
+    title: "Landscape",
+    image: "/images/04.jpg",
+    year: "2024",
+  },
 ];
 ---
 
-<!doctype html>
 <html lang="en">
   <head>
-	<BaseHead title={`Photography — ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Thomas Boom</title>
+
+    <style>
+      :root {
+        --bg: #ffffff;
+        --text: #111111;
+        --muted: #777777;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        position: fixed;
+        width: 220px;
+        height: 100vh;
+        padding: 32px 24px;
+        border-right: 1px solid #efefef;
+      }
+
+      .name {
+        font-size: 13px;
+        margin-bottom: 24px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .bio {
+        color: var(--muted);
+        margin-bottom: 32px;
+        max-width: 150px;
+      }
+
+      nav {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      nav a:hover {
+        opacity: 0.5;
+      }
+
+      .content {
+        margin-left: 220px;
+        padding: 24px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+      }
+
+      .post {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .post img {
+        width: 100%;
+        display: block;
+      }
+
+      .meta {
+        margin-top: 8px;
+        display: flex;
+        justify-content: space-between;
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      @media (max-width: 800px) {
+        .layout {
+          display: block;
+        }
+
+        .sidebar {
+          position: relative;
+          width: 100%;
+          height: auto;
+          border-right: none;
+          border-bottom: 1px solid #efefef;
+        }
+
+        .content {
+          margin-left: 0;
+          padding: 16px;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+      }
+    </style>
   </head>
+
   <body>
-	<Header />
-	<main>
-	  <h1>Photography</h1>
-	  <p class="lead">A curated selection of photographs. Click any image to view full size.</p>
-	  <PhotoGrid photos={photos} />
-	</main>
-	<Footer />
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="name">Thomas Boom</div>
+
+        <div class="bio">
+          Artist & photographer based in Rotterdam.
+        </div>
+
+        <nav>
+          <a href="/">Work</a>
+          <a href="/about">About</a>
+          <a href="mailto:hello@thomasboom.nl">Contact</a>
+          <a href="https://instagram.com">Instagram</a>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <div class="grid">
+          {posts.map((post) => (
+            <article class="post">
+              <img src={post.image} alt={post.title} loading="lazy" />
+
+              <div class="meta">
+                <span>{post.title}</span>
+                <span>{post.year}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </main>
+    </div>
   </body>
 </html>
