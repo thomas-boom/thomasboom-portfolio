@@ -1,0 +1,26 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Carousel from '../components/Carousel.astro';
+
+const photos = [
+  { src: 'https://images.unsplash.com/photo-1504198458649-3128b932f49b?auto=format&fit=crop&w=1600&q=80', alt: 'Ridges', caption: 'Ridges' },
+  { src: 'https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&w=1600&q=80', alt: 'Forest path', caption: 'Forest path' },
+  { src: 'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1600&q=80', alt: 'City skyline', caption: 'City skyline' }
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`to meander — Thomas Boom`} description="A to meander photo set" />
+  </head>
+  <body>
+    <Header />
+    <main class="content centered">
+      <Carousel photos={photos} showControls={false} clickToNext={true} autoplay={false} />
+    </main>
+    <Footer />
+  </body>
+</html>
