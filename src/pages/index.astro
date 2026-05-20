@@ -61,8 +61,8 @@ const photos2903 = [
         </div>
 
         <nav>
-          <a href="/to-meander">to meander</a>
-          <a href="/2903">2903</a>
+          <a href="#to-meander">to meander</a>
+          <a href="#2903">2903</a>
           <a href="mailto:hello@thomasboom.nl">Contact</a>
           <a href="https://instagram.com">Instagram</a>
         </nav>
@@ -79,15 +79,31 @@ const photos2903 = [
       function showSet(name){
         Object.keys(wrappers).forEach(k => wrappers[k].classList.toggle('active', k === name));
       }
-      // default
-      showSet('home');
+
+      function nameFromHash() {
+        const h = location.hash.replace(/^#/, '');
+        return h || 'home';
+      }
+
+      // initial display based on hash (or default)
+      showSet(nameFromHash());
+
+      // respond to back/forward
+      window.addEventListener('hashchange', () => showSet(nameFromHash()));
+
       nav.addEventListener('click', (e) => {
         const a = e.target.closest('a');
         if (!a || !nav.contains(a)) return;
-        e.preventDefault();
         const href = a.getAttribute('href') || '';
-        const name = href === '/' ? 'home' : href.replace(/^\//, '');
-        showSet(name);
+        // allow external links and mailto
+        if (href.startsWith('mailto:') || href.startsWith('http')) return;
+        e.preventDefault();
+        let name = 'home';
+        if (href.startsWith('#')) name = href.replace(/^#/, '') || 'home';
+        else if (href === '/') name = 'home';
+        else name = href.replace(/^\//, '');
+        // update hash which triggers hashchange and showSet
+        location.hash = name;
       });
     })();
     </script>
