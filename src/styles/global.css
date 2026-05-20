@@ -69,6 +69,16 @@ a {
   letter-spacing: 0.04em;
 }
 
+.brand-link {
+  color: inherit;
+  text-decoration: none;
+  display: inline-block;
+}
+.brand-link:hover,
+.brand-link:focus {
+  text-decoration: underline;
+}
+
 .bio {
   color: var(--muted);
   margin-top: 6px;
