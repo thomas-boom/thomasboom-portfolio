@@ -1,15 +1,21 @@
 ---
-const { photos = [], autoplay = true, interval = 5000 } = Astro.props;
+const { photos = [], autoplay = true, interval = 5000, showControls = true, clickToNext = false } = Astro.props;
 ---
 
-<div class="carousel" role="region" aria-roledescription="carousel" aria-label="Featured photos carousel" data-autoplay={autoplay} data-interval={String(interval)}>
+<div class="carousel" role="region" aria-roledescription="carousel" aria-label="Featured photos carousel" data-autoplay={autoplay} data-interval={String(interval)} data-show-controls={String(showControls)} data-click-next={String(clickToNext)}>
   <div class="carousel-viewport">
     <div class="carousel-track">
       {photos.map((p, i) => (
         <div class="carousel-slide" data-index={i} aria-hidden={i !== 0}>
-          <a href={p.href || p.src} target="_blank" rel="noopener noreferrer">
-            <img src={p.src} alt={p.alt || p.caption || ''} loading="lazy" decoding="async" />
-          </a>
+          {clickToNext ? (
+            <div class="carousel-click" role="button" tabindex="0" data-index={i} aria-label={`Next (image ${i + 1})`}>
+              <img src={p.src} alt={p.alt || p.caption || ''} loading="lazy" decoding="async" />
+            </div>
+          ) : (
+            <a href={p.href || p.src} target="_blank" rel="noopener noreferrer">
+              <img src={p.src} alt={p.alt || p.caption || ''} loading="lazy" decoding="async" />
+            </a>
+          )}
         </div>
       ))}
     </div>
@@ -26,11 +32,13 @@ const { photos = [], autoplay = true, interval = 5000 } = Astro.props;
 </div>
 
 <style>
-.carousel { position: relative; width: 100%; overflow: visible; }
+.carousel { position: relative; width: 100%; overflow: visible; max-width: 900px; margin: 0 auto; }
 .carousel-viewport { overflow: hidden; border-radius: 8px; }
 .carousel-track { display: flex; transition: transform 0.45s cubic-bezier(.2,.8,.2,1); will-change: transform; }
 .carousel-slide { min-width: 100%; flex: 0 0 100%; display:flex; align-items:center; justify-content:center; }
 .carousel-slide img { width:100%; height:auto; display:block; border-radius: 8px; box-shadow: var(--box-shadow); }
+.carousel-click { width: 100%; cursor: pointer; }
+.carousel-click img { display: block; width: 100%; }
 .carousel-prev, .carousel-next { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: 1px solid rgba(0,0,0,0.06); width:44px; height:44px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; color: rgb(var(--black)); cursor:pointer; border-radius:999px; }
 .carousel-prev { left: 8px; }
 .carousel-next { right: 8px; }
@@ -38,6 +46,10 @@ const { photos = [], autoplay = true, interval = 5000 } = Astro.props;
 .carousel-dot { width:10px; height:10px; border-radius:50%; background: rgba(var(--gray-dark),0.12); border:none; cursor:pointer; }
 .carousel-dot[aria-current="true"] { background: var(--accent); }
 .carousel:focus { outline: none; }
+/* hide controls when requested */
+.carousel[data-show-controls='false'] .carousel-prev,
+.carousel[data-show-controls='false'] .carousel-next,
+.carousel[data-show-controls='false'] .carousel-dots { display: none; }
 @media (max-width: 720px){ .carousel-prev, .carousel-next { width:36px; height:36px; font-size:1.25rem; } }
 </style>
 
@@ -54,6 +66,7 @@ const { photos = [], autoplay = true, interval = 5000 } = Astro.props;
   const nextBtn = root.querySelector('.carousel-next');
   const dots = Array.from(root.querySelectorAll('.carousel-dot'));
   const autoplay = root.dataset.autoplay === 'true';
+  const clickToNext = root.dataset.clickNext === 'true';
   const interval = Number(root.dataset.interval) || 5000;
 
   let index = 0;
@@ -73,6 +86,20 @@ const { photos = [], autoplay = true, interval = 5000 } = Astro.props;
   prevBtn.addEventListener('click', () => { goTo(index - 1); restart(); });
   nextBtn.addEventListener('click', () => { goTo(index + 1); restart(); });
   dots.forEach(d => d.addEventListener('click', () => { goTo(Number(d.dataset.index)); restart(); }));
+
+  // image click -> next
+  if (clickToNext) {
+    slides.forEach((s) => {
+      const btn = s.querySelector('.carousel-click');
+      if (btn) {
+        btn.addEventListener('click', () => { goTo(index + 1); restart(); });
+        btn.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goTo(index + 1); restart(); } });
+      } else {
+        const a = s.querySelector('a');
+        if (a) a.addEventListener('click', (e) => { e.preventDefault(); goTo(index + 1); restart(); });
+      }
+    });
+  }
 
   // pause on hover/focus
   root.addEventListener('mouseenter', stop);

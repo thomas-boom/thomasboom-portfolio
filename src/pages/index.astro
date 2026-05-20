@@ -38,21 +38,8 @@ const photos = posts.map(p => ({ src: p.image, alt: p.title, caption: p.year }))
 
   <body>
     <div class="layout">
-      <main class="content">
-        <Carousel photos={photos} />
-
-        <div class="grid">
-          {posts.map((post) => (
-            <article class="post">
-              <img src={post.image} alt={post.title} loading="lazy" />
-
-              <div class="meta">
-                <span>{post.title}</span>
-                <span>{post.year}</span>
-              </div>
-            </article>
-          ))}
-        </div>
+      <main class="content centered">
+        <Carousel photos={photos} showControls={false} clickToNext={true} autoplay={false} />
       </main>
 
       <aside class="sidebar">

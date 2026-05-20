@@ -94,6 +94,15 @@ nav a:hover {
   padding-bottom: calc(var(--sidebar-height) + 24px);
 }
 
+/* center content vertically/horizontally when requested */
+.content.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--sidebar-height));
+  padding-bottom: calc(var(--sidebar-height) + 24px);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
