@@ -5,24 +5,14 @@ import '../styles/global.css';
 const posts = [
   {
     title: "Untitled",
-    image: "/blog-placeholder-1.jpg",
+    image: "https://images.unsplash.com/photo-1777911045174-37d19edb0c02?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     year: "2025",
   },
   {
     title: "Rotterdam",
-    image: "/blog-placeholder-2.jpg",
+    image: "https://plus.unsplash.com/premium_photo-1777559750449-514dd9526440?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     year: "2025",
-  },
-  {
-    title: "Family",
-    image: "/blog-placeholder-3.jpg",
-    year: "2024",
-  },
-  {
-    title: "Landscape",
-    image: "/blog-placeholder-4.jpg",
-    year: "2024",
-  },
+  }
 ];
 
 const photos = posts.map(p => ({ src: p.image, alt: p.title, caption: p.year }));
