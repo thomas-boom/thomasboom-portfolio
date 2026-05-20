@@ -1,0 +1,23 @@
+/* Page-specific styles for photography */
+main {
+  max-width: 1100px;
+  padding-top: 2.5em;
+}
+.lead {
+  margin-bottom: 1.25rem;
+  color: rgba(var(--gray-dark), 0.9);
+}
+
+/* Tighter spacing for the photo grid container */
+.photo-grid {
+  margin-top: 0.5rem;
+}
+
+/* Make captions slightly lighter */
+.photo figcaption {
+  color: rgba(var(--gray-dark), 0.8);
+}
+
+@media (max-width: 900px) {
+  main { max-width: 90%; }
+}
