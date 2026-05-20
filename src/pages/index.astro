@@ -78,6 +78,21 @@ const photos2903 = [
       const wrappers = Object.fromEntries(Array.from(document.querySelectorAll('.carousel-wrapper')).map(el => [el.dataset.set, el]));
       function showSet(name){
         Object.keys(wrappers).forEach(k => wrappers[k].classList.toggle('active', k === name));
+        // Update active state in bottom nav links
+        if (nav) {
+          const anchors = Array.from(nav.querySelectorAll('a'));
+          anchors.forEach(a => {
+            const href = a.getAttribute('href') || '';
+            if (href.startsWith('#')) {
+              const target = href.replace(/^#/, '') || 'home';
+              a.classList.toggle('active', target === name);
+            } else if (href === '/' && name === 'home') {
+              a.classList.add('active');
+            } else {
+              a.classList.remove('active');
+            }
+          });
+        }
       }
 
       function nameFromHash() {

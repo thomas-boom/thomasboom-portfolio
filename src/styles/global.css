@@ -88,6 +88,11 @@ nav a:hover {
   opacity: 0.5;
 }
 
+.sidebar nav a.active {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
 .content {
   flex: 1 1 auto;
   padding: 24px;

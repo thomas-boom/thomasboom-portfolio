@@ -33,9 +33,10 @@ const { photos = [], autoplay = true, interval = 5000, showControls = true, clic
 
 <style>
 .carousel { position: relative; width: 100%; overflow: visible; max-width: 900px; margin: 0 auto; }
-.carousel-viewport { overflow: hidden; border-radius: 8px; }
-.carousel-track { display: flex; transition: transform 0.45s cubic-bezier(.2,.8,.2,1); will-change: transform; }
-.carousel-slide { min-width: 100%; flex: 0 0 100%; display:flex; align-items:center; justify-content:center; }
+.carousel-viewport { overflow: hidden; border-radius: 8px; position: relative; }
+.carousel-track { position: relative; height: auto; }
+.carousel-slide { position: absolute; inset: 0; width: 100%; display:flex; align-items:center; justify-content:center; opacity: 0; transition: opacity 0.45s cubic-bezier(.2,.8,.2,1); pointer-events: none; }
+.carousel-slide.is-active { opacity: 1; z-index: 1; pointer-events: auto; }
 .carousel-slide img { width:100%; height:auto; display:block; border-radius: 8px; box-shadow: var(--box-shadow); }
 .carousel-click { width: 100%; cursor: pointer; }
 .carousel-click img { display: block; width: 100%; }
@@ -79,12 +80,29 @@ const { photos = [], autoplay = true, interval = 5000, showControls = true, clic
   let index = 0;
   let timer = null;
 
+  function setViewportHeight(){
+    const vp = root.querySelector('.carousel-viewport');
+    if (!vp) return;
+    const active = slides[index];
+    if (!active) return;
+    const img = active.querySelector('img');
+    if (img && !img.complete) {
+      img.addEventListener('load', () => { vp.style.height = active.offsetHeight + 'px'; }, { once: true });
+    } else {
+      vp.style.height = active.offsetHeight + 'px';
+    }
+  }
+
   function goTo(i) {
     if (!slides.length) return;
     index = ((i % slides.length) + slides.length) % slides.length;
-    if (track) track.style.transform = `translateX(-${index * 100}%)`;
-    slides.forEach((s, idx) => s.setAttribute('aria-hidden', idx !== index));
+    slides.forEach((s, idx) => {
+      const active = idx === index;
+      s.classList.toggle('is-active', active);
+      s.setAttribute('aria-hidden', !active);
+    });
     dots.forEach((d, idx) => d.setAttribute('aria-current', idx === index ? 'true' : 'false'));
+    setViewportHeight();
   }
 
   function start() { if (autoplay && !timer) timer = setInterval(() => goTo(index + 1), interval); }
@@ -122,6 +140,9 @@ const { photos = [], autoplay = true, interval = 5000, showControls = true, clic
   // keyboard
   root.tabIndex = 0;
   root.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') { goTo(index - 1); restart(); } if (e.key === 'ArrowRight') { goTo(index + 1); restart(); } });
+
+  // ensure viewport height updates on resize
+  window.addEventListener('resize', setViewportHeight);
 
   // initialize
   goTo(0);
