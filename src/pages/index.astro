@@ -1,4 +1,6 @@
 ---
+import Carousel from '../components/Carousel.astro';
+
 const posts = [
   {
     title: "Untitled",
@@ -21,6 +23,8 @@ const posts = [
     year: "2024",
   },
 ];
+
+const photos = posts.map(p => ({ src: p.image, alt: p.title, caption: p.year }));
 ---
 
 <html lang="en">
@@ -167,6 +171,8 @@ const posts = [
       </aside>
 
       <main class="content">
+        <Carousel photos={photos} />
+
         <div class="grid">
           {posts.map((post) => (
             <article class="post">
