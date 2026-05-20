@@ -125,6 +125,26 @@ const { photos = [], autoplay = true, interval = 5000, showControls = true, clic
         if (a) a.addEventListener('click', (e) => { e.preventDefault(); goTo(index + 1); restart(); });
       }
     });
+
+    // Delegated fallback: ensure clicks advance even if per-slide listeners fail
+    root.addEventListener('click', (e) => {
+      const btn = e.target.closest && e.target.closest('.carousel-click');
+      if (!btn || !root.contains(btn)) return;
+      e.preventDefault();
+      goTo(index + 1);
+      restart();
+    });
+
+    root.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const focused = document.activeElement;
+      if (!focused) return;
+      if (!root.contains(focused)) return;
+      if (!focused.closest || !focused.closest('.carousel-click')) return;
+      e.preventDefault();
+      goTo(index + 1);
+      restart();
+    });
   }
 
   // pause on hover/focus
