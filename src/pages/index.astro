@@ -38,21 +38,6 @@ const photos = posts.map(p => ({ src: p.image, alt: p.title, caption: p.year }))
 
   <body>
     <div class="layout">
-      <aside class="sidebar">
-        <div class="name">Thomas Boom</div>
-
-        <div class="bio">
-          Artist & photographer based in Rotterdam.
-        </div>
-
-        <nav>
-          <a href="/">Work</a>
-          <a href="/about">About</a>
-          <a href="mailto:hello@thomasboom.nl">Contact</a>
-          <a href="https://instagram.com">Instagram</a>
-        </nav>
-      </aside>
-
       <main class="content">
         <Carousel photos={photos} />
 
@@ -69,6 +54,20 @@ const photos = posts.map(p => ({ src: p.image, alt: p.title, caption: p.year }))
           ))}
         </div>
       </main>
+
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="name">Thomas Boom</div>
+          <div class="bio">Artist & photographer based in Rotterdam.</div>
+        </div>
+
+        <nav>
+          <a href="/">Work</a>
+          <a href="/about">About</a>
+          <a href="mailto:hello@thomasboom.nl">Contact</a>
+          <a href="https://instagram.com">Instagram</a>
+        </nav>
+      </aside>
     </div>
   </body>
 </html>

@@ -2,7 +2,7 @@
 const { photos = [], autoplay = true, interval = 5000 } = Astro.props;
 ---
 
-<div class="carousel" role="region" aria-roledescription="carousel" aria-label="Photography carousel" data-autoplay={autoplay} data-interval={String(interval)}>
+<div class="carousel" role="region" aria-roledescription="carousel" aria-label="Featured photos carousel" data-autoplay={autoplay} data-interval={String(interval)}>
   <div class="carousel-viewport">
     <div class="carousel-track">
       {photos.map((p, i) => (
