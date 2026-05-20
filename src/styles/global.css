@@ -103,6 +103,10 @@ nav a:hover {
   padding-bottom: calc(var(--sidebar-height) + 24px);
 }
 
+/* Multiple carousel wrappers for client-side switching */
+.carousel-wrapper { display: none; width: 100%; }
+.carousel-wrapper.active { display: block; }
+
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

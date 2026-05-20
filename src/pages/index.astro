@@ -15,7 +15,19 @@ const posts = [
   }
 ];
 
-const photos = posts.map(p => ({ src: p.image, alt: p.title, caption: p.year }));
+const homePhotos = posts.map(p => ({ src: p.image, alt: p.title, caption: p.year }));
+
+const toMeanderPhotos = [
+  { src: 'https://images.unsplash.com/photo-1504198458649-3128b932f49b?auto=format&fit=crop&w=1600&q=80', alt: 'Ridges', caption: 'Ridges' },
+  { src: 'https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&w=1600&q=80', alt: 'Forest path', caption: 'Forest path' },
+  { src: 'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1600&q=80', alt: 'City skyline', caption: 'City skyline' }
+];
+
+const photos2903 = [
+  { src: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80', alt: 'Desert', caption: 'Desert' },
+  { src: 'https://images.unsplash.com/photo-1493244040629-496f6d136cc3?auto=format&fit=crop&w=1600&q=80', alt: 'Portrait', caption: 'Portrait' },
+  { src: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80', alt: 'Ocean', caption: 'Ocean' }
+];
 ---
 
 <html lang="en">
@@ -29,7 +41,17 @@ const photos = posts.map(p => ({ src: p.image, alt: p.title, caption: p.year }))
   <body>
     <div class="layout">
       <main class="content centered">
-        <Carousel photos={photos} showControls={false} clickToNext={true} autoplay={false} />
+        <div class="carousel-wrapper" data-set="home">
+          <Carousel photos={homePhotos} showControls={false} clickToNext={true} autoplay={false} />
+        </div>
+
+        <div class="carousel-wrapper" data-set="to-meander">
+          <Carousel photos={toMeanderPhotos} showControls={false} clickToNext={true} autoplay={false} />
+        </div>
+
+        <div class="carousel-wrapper" data-set="2903">
+          <Carousel photos={photos2903} showControls={false} clickToNext={true} autoplay={false} />
+        </div>
       </main>
 
       <aside class="sidebar">
@@ -50,5 +72,24 @@ const photos = posts.map(p => ({ src: p.image, alt: p.title, caption: p.year }))
         </div>
       </aside>
     </div>
+    <script>
+    (function(){
+      const nav = document.querySelector('.sidebar nav');
+      const wrappers = Object.fromEntries(Array.from(document.querySelectorAll('.carousel-wrapper')).map(el => [el.dataset.set, el]));
+      function showSet(name){
+        Object.keys(wrappers).forEach(k => wrappers[k].classList.toggle('active', k === name));
+      }
+      // default
+      showSet('home');
+      nav.addEventListener('click', (e) => {
+        const a = e.target.closest('a');
+        if (!a || !nav.contains(a)) return;
+        e.preventDefault();
+        const href = a.getAttribute('href') || '';
+        const name = href === '/' ? 'home' : href.replace(/^\//, '');
+        showSet(name);
+      });
+    })();
+    </script>
   </body>
 </html>

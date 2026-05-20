@@ -57,7 +57,14 @@ const { photos = [], autoplay = true, interval = 5000, showControls = true, clic
 (function () {
   const script = document.currentScript;
   if (!script) return;
-  const root = script.parentElement;
+
+  // Find the nearest preceding element with the `.carousel` class.
+  let root = script.previousElementSibling;
+  while (root && !(root.classList && root.classList.contains('carousel'))) {
+    root = root.previousElementSibling;
+  }
+  // Fallback: search within parent
+  if (!root && script.parentElement) root = script.parentElement.querySelector('.carousel');
   if (!root) return;
 
   const track = root.querySelector('.carousel-track');
@@ -73,8 +80,9 @@ const { photos = [], autoplay = true, interval = 5000, showControls = true, clic
   let timer = null;
 
   function goTo(i) {
+    if (!slides.length) return;
     index = ((i % slides.length) + slides.length) % slides.length;
-    track.style.transform = `translateX(-${index * 100}%)`;
+    if (track) track.style.transform = `translateX(-${index * 100}%)`;
     slides.forEach((s, idx) => s.setAttribute('aria-hidden', idx !== index));
     dots.forEach((d, idx) => d.setAttribute('aria-current', idx === index ? 'true' : 'false'));
   }
@@ -83,8 +91,8 @@ const { photos = [], autoplay = true, interval = 5000, showControls = true, clic
   function stop() { if (timer) { clearInterval(timer); timer = null; } }
   function restart() { stop(); start(); }
 
-  prevBtn.addEventListener('click', () => { goTo(index - 1); restart(); });
-  nextBtn.addEventListener('click', () => { goTo(index + 1); restart(); });
+  if (prevBtn) prevBtn.addEventListener('click', () => { goTo(index - 1); restart(); });
+  if (nextBtn) nextBtn.addEventListener('click', () => { goTo(index + 1); restart(); });
   dots.forEach(d => d.addEventListener('click', () => { goTo(Number(d.dataset.index)); restart(); }));
 
   // image click -> next
