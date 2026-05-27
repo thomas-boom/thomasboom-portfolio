@@ -6,14 +6,14 @@ const { photos = [], autoplay = true, interval = 5000, showControls = true, clic
   <div class="carousel-viewport">
     <div class="carousel-track">
       {photos.map((p, i) => (
-        <div class="carousel-slide" data-index={i} aria-hidden={i !== 0}>
+        <div class={`carousel-slide ${i === 0 ? 'is-active' : ''}`} data-index={i} aria-hidden={i !== 0}>
           {clickToNext ? (
             <div class="carousel-click" role="button" tabindex="0" data-index={i} aria-label={`Next (image ${i + 1})`}>
-              <img src={p.src} alt={p.alt || p.caption || ''} loading="lazy" decoding="async" />
+              <img src={p.src} alt={p.alt || p.caption || ''} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
             </div>
           ) : (
             <a href={p.href || p.src} target="_blank" rel="noopener noreferrer">
-              <img src={p.src} alt={p.alt || p.caption || ''} loading="lazy" decoding="async" />
+              <img src={p.src} alt={p.alt || p.caption || ''} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
             </a>
           )}
         </div>
@@ -34,8 +34,8 @@ const { photos = [], autoplay = true, interval = 5000, showControls = true, clic
 <style>
 .carousel { position: relative; width: 100%; overflow: visible; max-width: 900px; margin: 0 auto; }
 .carousel-viewport { overflow: hidden; border-radius: 8px; position: relative; }
-.carousel-track { position: relative; height: auto; }
-.carousel-slide { position: absolute; inset: 0; width: 100%; display:flex; align-items:center; justify-content:center; opacity: 0; transition: opacity 0.45s cubic-bezier(.2,.8,.2,1); pointer-events: none; }
+.carousel-track { display: grid; }
+.carousel-slide { grid-area: 1 / 1; width: 100%; display:flex; align-items:center; justify-content:center; opacity: 0; transition: opacity 0.45s cubic-bezier(.2,.8,.2,1); pointer-events: none; position: relative; }
 .carousel-slide.is-active { opacity: 1; z-index: 1; pointer-events: auto; }
 .carousel-slide img { width:100%; height:auto; display:block; border-radius: 8px; box-shadow: var(--box-shadow); }
 .carousel-click { width: 100%; cursor: pointer; }
